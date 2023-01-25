@@ -50,14 +50,18 @@ class CommunityLinkController extends Controller
         CommunityLink::create($request->all());
         return back();
         //return response('Respuesta', 200);
-        //return response('Error', 404);
+        return response('Error', 404);
 
-        /*
+        
         $this->validate($request, [
             'title' => 'required',
             'link' => 'required|active_url'
         ]);
-        */
+
+
+
+
+        
     }
 
     /**

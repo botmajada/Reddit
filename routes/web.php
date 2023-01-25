@@ -28,7 +28,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 Route::get('community', [App\Http\Controllers\CommunityLinkController::class, 'index']);
 Route::post('community', [App\Http\Controllers\CommunityLinkController::class, 'store'])->middleware('auth');
 

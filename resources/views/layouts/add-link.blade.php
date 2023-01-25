@@ -8,13 +8,13 @@
                         <div class="form-group">
                             <label for="title">Title:</label>
 
-                            <input type="text" class="form-control" id="title" name="title" placeholder="What is the title of your article?">
+                            <input type="text" class="form-control @error('title') is-invalid @else is valid @enderror" id="title" name="title" placeholder="What is the title of your article?">
 
                         </div>
 
                         <div class="form-group">
                             <label for="link">Link:</label>
-                            <input type="text" class="form-control" id="link" name="link" placeholder="What is the URL?">
+                            <input type="text" class="form-control @error('link') is-invalid @else is valid @enderror" id="link" name="link" placeholder="What is the URL?">
 
                         </div>
 
@@ -24,3 +24,4 @@
                     </form>
                 </div>
             </div>
+
