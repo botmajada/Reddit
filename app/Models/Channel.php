@@ -13,4 +13,10 @@ class Channel extends Model
     protected $fillable = [
         'title', 'slug', 'color'
     ];
+
+    public function links()
+    {
+        return $this->hasMany(CommunityLink::class);
+    }
+
 }

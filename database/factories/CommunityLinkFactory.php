@@ -17,12 +17,11 @@ class CommunityLinkFactory extends Factory
     public function definition()
     {
         return [
-            
-           'user_id' => \App\Models\User::all()->random()->id,
-           'channel_id' => \App\Models\Channel::all()->random()->id,,
-           'title' => $this->faker->sentence,
-           'link' => $this->faker->url,
-           'approved' => 0
+            'user_id' => \App\Models\User::all()->random()->id,
+            'channel_id' => \App\Models\Channel::all()->random()->id,
+            'title' => $this->faker->sentence,
+            'link' => $this->faker->url,
+            'approved' => 0
         ];
     }
 }
