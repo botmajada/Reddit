@@ -27,7 +27,6 @@ class CommynityLinkForm extends FormRequest
             'title' => 'required',
             'link' => 'required|active_url',
             'channel_id' => 'required|exists:channels,id',
-            'link' => 'required|active_url|unique:community_links'
         ];
     }
 }
