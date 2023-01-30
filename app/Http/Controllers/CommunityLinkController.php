@@ -19,7 +19,9 @@ class CommunityLinkController extends Controller
     {
 
         $channels = Channel::orderBy('title', 'asc')->get();
-        $links = CommunityLink::paginate(25);
+
+        $links = CommunityLink::where('approved', 1)->paginate(25);
+
         return view('community/index', compact('links', 'channels'));
     }
 
@@ -30,7 +32,11 @@ class CommunityLinkController extends Controller
      */
     public function create()
     {
-        //
+        $channels = Channel::orderBy('title', 'asc')->get();
+        return view('community/create', compact('channels'));
+
+
+
     }
 
     /**
@@ -41,13 +47,7 @@ class CommunityLinkController extends Controller
      */
     public function store(Request $request)
     {
-        /*
-        dd($request);
-        $request->path();
-        $request->url();
-        $request->input();
-        $request->fullUrl();
-        */
+
         $this->validate($request, [
             'title' => 'required',
             'link' => 'required|active_url',
@@ -56,14 +56,11 @@ class CommunityLinkController extends Controller
 
         ]);
 
-        request()->merge(['user_id' => Auth::id()]);
+
+        $approved = Auth::user()->trusted ? true : false;
+        request()->merge(['user_id' => Auth::id(), 'approved' => $approved]);
         CommunityLink::create($request->all());
-        return back();
-        //return response('Respuesta', 200);
-        //return response('Error', 404);
-
-
-
+        return back()->with('success', 'Link added successfully');
     }
 
     /**
