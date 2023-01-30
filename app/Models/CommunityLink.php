@@ -25,7 +25,7 @@ class CommunityLink extends Model
         return $this->belongsTo(Channel::class);
     }
 
-    protected static function hasAlreadyBeenSubmitted($link)
+    public function hasAlreadyBeenSubmitted($link)
     {
         if ($existing = static::where('link', $link)->first()) {
             $existing->touch();

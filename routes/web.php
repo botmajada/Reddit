@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
 
 Route::get('community', [App\Http\Controllers\CommunityLinkController::class, 'index']);
 Route::post('community', [App\Http\Controllers\CommunityLinkController::class, 'store'])->middleware('auth');
+Route::get('community/{channel}', [App\Http\Controllers\CommunityLinkController::class, 'index']);
+
 
 
 require __DIR__.'/auth.php';
