@@ -18,6 +18,7 @@
                 @include ('layouts.add-link')
             </div>
         </div>
+
         {{ $links->links() }}
     </div>
 @stop
