@@ -1,5 +1,5 @@
-<div class="col-md-8">
-    <h1>Community</h1>
+<div class="col-md-8"> 
+<h1><a href="/community">Community {{ $title}}</a></h1>
     @foreach ($links as $link)
     <li>
         <span class="label label-default" style="background: {{ $link->channel->color }}">
