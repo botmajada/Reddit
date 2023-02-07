@@ -34,4 +34,6 @@ class CommunityLink extends Model
         }
         return false;
     }
+
+
 }

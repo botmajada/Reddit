@@ -24,4 +24,11 @@ class Channel extends Model
     {
         return 'slug';
     }
+
+
+
+    public function communitylinks()
+    {
+        return $this->hasMany(CommunityLink::class);
+    }
 }
