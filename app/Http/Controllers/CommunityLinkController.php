@@ -17,12 +17,19 @@ class CommunityLinkController extends Controller
      */
     public function index(Channel $channel = null)
     {
-            $title = null; // Titulo al lado de community
+        $title = null; // Titulo al lado de community
         if ($channel == null) {
+
             $links = CommunityLink::where('approved', true)->latest('updated_at')->paginate(25);
+
         } else {
-            $links = CommunityLink::where("channel_id", $channel->id)->paginate(25);
+
+            $links = CommunityLink::where($channel->communitylinks())->paginate(25);
+
+         // $links = CommunityLink::where("channel_id", $channel->id)->paginate(25);
+
             $title = '- ' . $channel->title;
+
         }
 
         $channels = Channel::orderBy('title', 'asc')->get();
