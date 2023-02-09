@@ -24,9 +24,8 @@ class CommunityLinkController extends Controller
 
         } else {
 
-            $links = CommunityLink::where($channel->communitylinks())->paginate(25);
+            $links = $channel->communitylinks()->where('approved', true)->latest('updated_at')->paginate(25);
 
-         // $links = CommunityLink::where("channel_id", $channel->id)->paginate(25);
 
             $title = '- ' . $channel->title;
 

@@ -35,5 +35,9 @@ class CommunityLink extends Model
         return false;
     }
 
-
+    // Relacion de muchos a muchos con la tabla pivote community_link_users
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'community_link_users');
+    }
 }
