@@ -52,9 +52,3 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(CommunityLink::class, 'community_link_users');
     }
 }
-
-
-
-
-
-

@@ -19,6 +19,7 @@
             </div>
         </div>
 
-        {{ $links->links() }}
+        {{$links->links()}}
+        
     </div>
 @stop

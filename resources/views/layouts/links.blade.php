@@ -8,7 +8,7 @@
     </span>
         <a href="{{ $link->link }}" target="_blank">{{ $link->title}} </a>
 
-        <small>Contributed by: {{$link->creator->name}} {{$link->updated_at->diffForHumans()}}</small>
+        <small>Contributed by: {{$link->creator->name}} {{$link->updated_at->diffForHumans()}} 👍{{$link->users()->count()}} </small>
     </li>
     @endforeach
 

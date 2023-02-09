@@ -20,10 +20,12 @@ class CommunityLink extends Model
         return $this->belongsTo(Channel::class, 'channel_id');
     }
 
+
     public function channel()
     {
         return $this->belongsTo(Channel::class);
     }
+
 
     public function hasAlreadyBeenSubmitted($link)
     {
@@ -35,7 +37,6 @@ class CommunityLink extends Model
         return false;
     }
 
-    // Relacion de muchos a muchos con la tabla pivote community_link_users
     public function users()
     {
         return $this->belongsToMany(User::class, 'community_link_users');
