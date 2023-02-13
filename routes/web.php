@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('community', [App\Http\Controllers\CommunityLinkController::class, 'index']);
-Route::post('community', [App\Http\Controllers\CommunityLinkController::class, 'store'])->middleware('auth');
+Route::post('community', [App\Http\Controllers\CommunityLinkController::class, 'store'])->middleware(['auth', 'verified']);
 Route::get('community/{channel}', [App\Http\Controllers\CommunityLinkController::class, 'index']);
 
 Route::post('/community/votes/{link}', [App\Http\Controllers\CommunityLinkUserController::class, 'store'])
