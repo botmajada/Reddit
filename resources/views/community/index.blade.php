@@ -21,7 +21,7 @@
         @endauth
     </div>
 
-    {{$links->links()}}
+    {{ $links->appends($_GET)->links() }}
 
 </div>
 @stop

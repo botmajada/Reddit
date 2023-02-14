@@ -1,0 +1,117 @@
+.lista::marker {
+  content: " ";
+}
+
+:root {
+  --color01: #50b63e;
+}
+
+li::marker {
+  content: "💀";
+}
+
+
+li > span {
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+      rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+      rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+li > span > a {
+  color: rgb(255, 255, 255);
+}
+
+
+
+li > a {
+  color: var(--color01);
+  text-decoration: none;
+  position: relative;
+  padding: 2px 2px;
+  transition: all 0.2s ease-out;
+}
+li >a:after {
+  content: " ";
+  width: 100%;
+  height: 1px;
+  background: var(--color01);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transition: all 0.2s ease-out;
+}
+li >a:before {
+  content: " ";
+  width: 4px;
+  height: 4px;
+  background: var(--color01);
+  position: absolute;
+  right: -4px;
+  bottom: 0;
+  opacity: 0;
+}
+li >a:hover {
+  background: rgba(57, 255, 20, 0.1);
+  transition: all 0.1s ease-out;
+  padding: 2px 8px;
+}
+li >a:hover:after {
+  width: 0px;
+  transition: all 0.1s ease-out;
+}
+li >a:hover:before {
+  opacity: 1;
+  animation: blink 0.4s infinite 0.1s;
+  transition: all 0.1s ease-out;
+}
+
+@keyframes blink {
+  0% {
+      opacity: 1;
+  }
+  50% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+.like{
+  animation: like 0.5s ease-in-out;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-direction: alternate;
+  animation-play-state: running;
+}
+
+
+.like:hover{
+  animation: pulse 0.5s ease-in-out infinite;
+
+}
+
+@keyframes like {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
