@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Channel;
 use App\Models\CommunityLink;
+use App\Models\User;
+use App\Http\Requests\CommunityLinkForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\CommynityLinkForm;
-use App\Models\CommunityLinkUser;
 use App\Queries\CommunityLinksQuery;
-
 
 class CommunityLinkController extends Controller
 {
@@ -26,34 +25,26 @@ class CommunityLinkController extends Controller
         $this->linksQuery = $linksQuery;
     }
 
-    public function index(Request $request, Channel $channel = null )
+    public function index(Request $request, Channel $channel = null)
     {
 
-        $title = null; // Titulo al lado de community
-        $links = $this->linksQuery->getAll();
-        if ($channel == null) {
-            $orderBy = 'created_at';
-            $orderDirection = 'desc';
-
-            if (request()->exists('popular')) {
-                $orderBy = 'votes_count';
-                $orderDirection = 'desc';
-            }
-
-            $links = CommunityLink::withCount('users') ->orderBy($orderBy, $orderDirection) ->paginate(25);
-
-        } else {
-
-            $links = $channel->communitylinks()->where('approved', true)->latest('updated_at')->paginate(25);
-
-
-            $title = '- ' . $channel->title;
-        }
-
+        $title = null;
+        $linksQuery = new CommunityLinksQuery();
         $channels = Channel::orderBy('title', 'asc')->get();
 
-        return view('community/index', compact('links', 'channels', 'title'));
+            if ($channel) {
+                $links = $linksQuery->getByChannel($channel);
+                $title = '- ' . $channel->title;
+            } else if ($request->has('popular')) {
+                $links = $linksQuery->getMostPopular();
+            } else {
+                $links = $linksQuery->getAll();
+            }
+
+            return view('community.index', compact('links', 'channels', 'title'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -62,9 +53,9 @@ class CommunityLinkController extends Controller
      */
     public function create($attributes)
     {
-        return redirect('/community')->with('flash', 'Tu enlace ha sido guardado!');
         $channels = Channel::orderBy('title', 'asc')->get();
-        return view('community/create', compact('channels'));
+        return view('community/create', compact('channels'))->with('flash', 'Tu enlace ha sido guardado!');
+        // return redirect('/community')->with('flash', 'Tu enlace ha sido guardado!');
     }
 
     /**
@@ -75,17 +66,16 @@ class CommunityLinkController extends Controller
      */
     public function store(Request $request)
     {
-        $attributes = $request->validate([
+        $request->validate([
             'channel_id' => 'required|exists:channels,id',
             'title' => 'required',
             'link' => 'required|url',
         ]);
 
-        $this->validate($request, (new CommynityLinkForm)->rules());
         $link = new CommunityLink();
         $link->user_id = Auth::id();
         if ($link->hasAlreadyBeenSubmitted($request->link)) {
-            return back()->with('success', 'Link added successfully');
+            return back()->with('error', 'This link has already been submitted');
         }
 
         $approved = Auth::user()->trusted ? true : false;
@@ -139,10 +129,21 @@ class CommunityLinkController extends Controller
         //
     }
 
-    public function vote(CommunityLink $communityLink)
+    public function vote(User $user, CommunityLink $communityLink)
     {
-        auth()->user()->VotedFor($communityLink);
-
+        if (!auth()->check()) {
+            return back()->with('error', 'Debes iniciar sesión para votar.');
+        }
+        if ($user->hasVotedFor($communityLink)) {
+            $user->removeVote($communityLink);
+        } else {
+            try {
+                $user->voteFor($communityLink);
+            } catch (\Exception $e) {
+                return back()->with('error', 'Hubo un problema con tu voto. Por favor intenta de nuevo más tarde.');
+            }
+        }
+        $communityLink->refresh();
         return back();
     }
 
@@ -154,7 +155,9 @@ class CommunityLinkController extends Controller
 
     public function getMostPopular()
     {
-        $links = $this->linksQuery->getMostPopular();
+        $links = CommunityLink::withCount('user')
+            ->orderBy('votes_count', 'desc')
+            ->paginate(25);
         return view('community.index', compact('links'));
     }
 }

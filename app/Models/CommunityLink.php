@@ -11,7 +11,7 @@ class CommunityLink extends Model
 
 
     protected $fillable = [
-        'user_id', 'channel_id', 'title', 'link', 'approved'
+        'user_id', 'channel_id', 'title', 'link', 'approved' , 'votes_count'
     ];
 
     public function creator()
@@ -37,8 +37,9 @@ class CommunityLink extends Model
         return false;
     }
 
-    public function users()
+    public function user()
     {
         return $this->belongsToMany(User::class, 'community_link_users');
     }
+
 }

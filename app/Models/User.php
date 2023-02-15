@@ -48,15 +48,28 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->trusted;
     }
 
-    public function users() {
+    public function user() {
         return $this->belongsToMany(CommunityLink::class, 'community_link_users');
     }
 
-    public function votes() {
+    public function vote() {
         return $this->belongsToMany(CommunityLink::class, 'community_link_users')->withTimestamps();
     }
 
-    public function VotedFor(CommunityLink $link) {
-        return $this->votes->contains($link);
+    public function hasVotedFor(CommunityLink $communityLink)
+    {
+        return $this->communityLinks->contains($communityLink);
+    }
+
+    public function votedFor(CommunityLink $link) {
+        return $this->vote->contains($link);
+    }
+
+    public function removeVote($user)
+    {
+        $this->vote()
+             ->where('user_id', $user->id)
+             ->delete();
+        $this->decrement('votes_count');
     }
 }

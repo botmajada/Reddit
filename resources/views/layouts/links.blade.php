@@ -3,15 +3,12 @@
 
 
     <ul class="nav">
-        <li class=" lista mr-3 mb-3 nav-item">
-            <a class="nav-link {{ !request()->exists('popular') ? '' : 'disabled' }}" href="{{ request()->url() }}">Mas
-                recientes</a>
+        <li class="lista mr-3 mb-3 nav-item">
+            <a class="nav-link{{ !request()->exists('popular') ? ' active' : '' }}" href="{{ url()->current() }}">Más recientes</a>
         </li>
-        
-        <li class=" lista ml-3 mb-3 nav-item">
-            <a class="nav-link {{ request()->exists('popular') ? 'disabled' : '' }}"
-                href="?popular{{ request()->exists('channel') ? '&channel=' . request()->input('channel') : '' }}">Mas
-                populares</a>
+        <li class="lista ml-3 mb-3 nav-item">
+            <a class="nav-link{{ request()->exists('popular') ? ' active' : '' }}"
+               href="{{ request()->fullUrlWithQuery(['popular' => true]) }}">Más populares</a>
         </li>
     </ul>
 
@@ -25,13 +22,16 @@
             <a href="{{ $link->link }}" target="_blank">{{ $link->title }} </a>
 
 
-            <form method="POST" action="/community/votes/{{ $link->id }}">
+            <form method="POST" action="/community/vote/{{ $link->id }}">
                 {{ csrf_field() }}
+
                 <button type="submit"
-                    class=" like {{ Auth::check() && Auth::user()->votedFor($link) ? 'btn-success' : 'btn-secondary' }}"
+                    class=" bi bi-hand-thumbs-up like {{ Auth::check() && Auth::user()->votedFor($link) ? 'btn-success' : 'btn-secondary' }}"
                     {{ Auth::guest() ? 'disabled' : '' }}>
-                   👍 {{ $link->users()->count() }}
+                 {{ $link->user()->count()}}
                 </button>
+
+                <input type="hidden" name="vote" value="upvote">
             </form>
 
             <small>Contributed by: {{ $link->creator->name }} {{ $link->updated_at->diffForHumans() }}</small>

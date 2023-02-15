@@ -91,7 +91,6 @@ li >a:hover:before {
 
 .like:hover{
   animation: pulse 0.5s ease-in-out infinite;
-
 }
 
 @keyframes like {
