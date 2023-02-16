@@ -35,5 +35,9 @@ Route::get('community/{channel}', [App\Http\Controllers\CommunityLinkController:
 Route::post('/community/vote/{link}', [App\Http\Controllers\CommunityLinkUserController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('community');
 
+//Route::get('/community', 'CommunityLinkController@index')->name('community.index');
+Route::get('/community', '\App\Http\Controllers\CommunityLinkController@index')->name('community.index');
+
+
 
 require __DIR__.'/auth.php';

@@ -27,21 +27,29 @@ class CommunityLinkController extends Controller
 
     public function index(Request $request, Channel $channel = null)
     {
-
         $title = null;
         $linksQuery = new CommunityLinksQuery();
         $channels = Channel::orderBy('title', 'asc')->get();
 
-            if ($channel) {
-                $links = $linksQuery->getByChannel($channel);
-                $title = '- ' . $channel->title;
-            } else if ($request->has('popular')) {
-                $links = $linksQuery->getMostPopular();
-            } else {
-                $links = $linksQuery->getAll();
-            }
-
-            return view('community.index', compact('links', 'channels', 'title'));
+        $links = $this->linksQuery->get();
+        $trimmedQuery = trim($request->input('q'));
+        $linksQuery = CommunityLink::query()
+            ->where('approved', 1)
+            ->where('spam', 0)
+            ->when($trimmedQuery, function ($query, $trimmedQuery) {
+                return $query->where('title', 'LIKE', '%' . $trimmedQuery . '%');
+            })
+            ->with('channel', 'creator')
+            ->orderBy('updated_at', 'desc');
+        if ($channel) {
+            $links = $linksQuery->getByChannel($channel);
+            $title = '- ' . $channel->title;
+        } else if ($request->has('popular')) {
+            $links = $linksQuery->paginate(10);
+        } else {
+            $links = $linksQuery->paginate(10);
+        }
+        return view('community.index', compact('links', 'channels', 'title'));
     }
 
 
